@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, HostListener, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, HostListener, Output, EventEmitter, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
 import { NgxExtendedPdfViewerService } from 'ngx-extended-pdf-viewer';
 
 import {
@@ -15,9 +15,9 @@ import { IPlayerEvent, PdfComponentInput, telEventType } from './playerEvents';
   styleUrls: ['./pdf-viewer.component.css']
 })
 
-export class PdfViewerComponent implements OnInit, OnDestroy {
+export class PdfViewerComponent implements OnInit, OnDestroy, OnChanges {
   @Input() pdfConfig: PdfComponentInput;
-
+  @Input() navigation: string;
   @Output() sendMetadata: EventEmitter<object> = new EventEmitter<IPlayerEvent>();
 
   currentPagePointer: number;
@@ -43,6 +43,7 @@ export class PdfViewerComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.pdfPlayerStartTime = this.pdfLastPageTime = new Date().getTime();
+    this.totalNumberOfPages = 0;
   }
 
   private pdfViewerCleanUp() {
@@ -144,10 +145,19 @@ export class PdfViewerComponent implements OnInit, OnDestroy {
     this.setPlayerEvent('HEARTBEAT', 'IMPRESSION', this.currentPagePointer, this.totalNumberOfPages, this.currentPagePointer, this.visits);
   }
 
-  // public navigationHandler(event: any) {
-  //   event === 'next' ?
-  //   (window as any).PDFViewerApplication.eventBus.dispatch('nextpage') :
-  //   (window as any).PDFViewerApplication.eventBus.dispatch('previouspage');
-  // }
+  public navigatePdf(direction: any) {
+   if ( (window as any).PDFViewerApplication) {
+    direction === 'next' ?
+      (window as any).PDFViewerApplication.eventBus.dispatch('nextpage') :
+      (window as any).PDFViewerApplication.eventBus.dispatch('previouspage');
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['navigation']) {
+        this.navigatePdf(changes.navigation.currentValue.navigate);
+    }
+  }
+
 
 }
