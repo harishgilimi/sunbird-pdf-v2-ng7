@@ -48,8 +48,6 @@ export class PdfViewerComponent implements OnInit, OnDestroy, OnChanges {
 
   private pdfViewerCleanUp() {
     if ((window as any).PDFViewerApplication) {
-      (window as any).PDFViewerApplication.unbindEvents();
-      (window as any).PDFViewerApplication.unbindWindowEvents();
       (window as any).PDFViewerApplication.cleanup();
       (window as any).PDFViewerApplication.close();
     }

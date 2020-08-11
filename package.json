@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build pdf-player-v2 && npm run assetscopy",
+    "build": "ng build pdf-player-v2",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
